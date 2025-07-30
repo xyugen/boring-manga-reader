@@ -22,7 +22,7 @@ export default function MangaDetailsComponent({ mangaId }: MangaDetailsProps) {
     const fetchMangaDetails = async () => {
       setLoading(true);
 
-      const mangaData = await fetch(`${APIRoutes.MANGA}?id=${mangaId}`).then(
+      const mangaData = await fetch(`${APIRoutes.MANGA}/${mangaId}`).then(
         (res) => res.json()
       );
 
@@ -36,6 +36,10 @@ export default function MangaDetailsComponent({ mangaId }: MangaDetailsProps) {
   const handleGoHome = () => {
     router.push(PageRoutes.HOME);
   };
+
+  const handleChapterClick = (chapterId: string) => {
+    router.push(`${PageRoutes.READ}/${mangaId}/${chapterId}`);
+  }
 
   if (loading) {
     return <MangaDetailsLoading />;
@@ -188,6 +192,7 @@ export default function MangaDetailsComponent({ mangaId }: MangaDetailsProps) {
               {manga.chapters.map((chapter) => (
                 <div
                   key={chapter.chapterId}
+                  onClick={() => handleChapterClick(chapter.chapterId)}
                   className="flex items-center justify-between p-4 bg-slate-700 hover:bg-slate-600 rounded-lg transition-colors cursor-pointer group"
                 >
                   <div className="flex items-center gap-4">

@@ -1,7 +1,14 @@
-import React from "react";
+import ChapterReader from "./_components/chapter-reader";
 
-const Page = () => {
-  return <div>Page</div>;
-};
+interface PageProps {
+  params: Promise<{
+    id: string;
+    chapter: string;
+  }>;
+}
 
-export default Page;
+export default async function ChapterReaderPage({ params }: PageProps) {
+  const { id, chapter } = await params;
+
+  return <ChapterReader mangaId={id} chapterId={chapter} />;
+}
