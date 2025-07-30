@@ -1,13 +1,13 @@
 "use client";
 
 import { APIRoutes } from "@/constants/api-routes";
+import { PageRoutes } from "@/constants/page-routes";
 import type MangaDetails from "@/interface/MangaDetails";
 import moment from "moment";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import MangaDetailsLoading from "./manga-details-loading";
-import { useRouter } from "next/navigation";
-import { PageRoutes } from "@/constants/page-routes";
 
 interface MangaDetailsProps {
   mangaId?: string;
@@ -33,13 +33,20 @@ export default function MangaDetailsComponent({ mangaId }: MangaDetailsProps) {
     fetchMangaDetails();
   }, [mangaId]);
 
+  const handleReadFirstChapter = () => {
+    if (!manga || !manga.chapters) return;
+    const mangaChapters = manga.chapters;
+    const firstChapter = mangaChapters.at(-1)?.chapterId;
+    router.push(`${PageRoutes.READ}/${mangaId}/${firstChapter}`);
+  };
+
   const handleGoHome = () => {
     router.push(PageRoutes.HOME);
   };
 
   const handleChapterClick = (chapterId: string) => {
     router.push(`${PageRoutes.READ}/${mangaId}/${chapterId}`);
-  }
+  };
 
   if (loading) {
     return <MangaDetailsLoading />;
@@ -161,7 +168,10 @@ export default function MangaDetailsComponent({ mangaId }: MangaDetailsProps) {
 
             {/* Action Buttons */}
             <div className="flex flex-wrap gap-3 pt-4">
-              <button className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors flex items-center gap-2">
+              <button
+                onClick={handleReadFirstChapter}
+                className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors flex items-center gap-2"
+              >
                 <span>📖</span>
                 Read First Chapter
               </button>
