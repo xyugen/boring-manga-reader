@@ -3,7 +3,7 @@ import moment from "moment";
 import Image from "next/image";
 
 interface MangaResultProps {
-  onClick?: () => void;
+  onClick?: (id: string) => void;
   manga: MangaSearchResult;
 }
 
@@ -13,7 +13,7 @@ const MangaResult = ({ onClick, manga }: MangaResultProps) => {
   return (
     <div
       className="overflow-hidden flex gap-2 mt-4 bg-slate-800 shadow rounded-xl hover:cursor-pointer hover:bg-slate-700/50 hover:shadow-2xl transition duration-150"
-      onClick={onClick}
+      onClick={() => onClick && onClick(manga.id)}
     >
       <Image
         src={manga.imgUrl!}
@@ -27,7 +27,9 @@ const MangaResult = ({ onClick, manga }: MangaResultProps) => {
       <div className="p-2">
         <h2 className="text-lg font-bold">{manga.title}</h2>
         <p className="text-sm text-gray-500">{manga.authors}</p>
-        <p className="text-gray-500">Chapters: {manga.latestChapters[0].chapter}</p>
+        <p className="text-gray-500">
+          Chapters: {manga.latestChapters[0].chapter}
+        </p>
         <p className="text-gray-500">Updated: {updated}</p>
         <p className="text-gray-500">Views: {manga.views}</p>
       </div>

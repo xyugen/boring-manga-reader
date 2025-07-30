@@ -4,9 +4,11 @@ import Input from "@/components/input";
 import MangaResult from "@/components/manga-result";
 import { APIRoutes } from "@/constants/api-routes";
 import SearchResult, { MangaSearchResult } from "@/interface/SearchResult";
+import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 
 export default function Home() {
+  const router = useRouter();
   const [query, setQuery] = useState("");
   const [searchResult, setSearchResult] = useState<SearchResult | null>(null);
   const [loading, setLoading] = useState(false);
@@ -61,6 +63,10 @@ export default function Home() {
     }
   };
 
+  const onResultClick = (id: string) => {
+    router.push(`/read/${id}`);
+  };
+
   const sort = (m1: MangaSearchResult, m2: MangaSearchResult) => {
     return (
       parseInt(m2.views.replaceAll(",", "")) -
@@ -88,7 +94,13 @@ export default function Home() {
           {searchResult &&
             searchResult.manga
               .sort(sort)
-              .map((manga) => <MangaResult key={manga.id} manga={manga} />)}
+              .map((manga) => (
+                <MangaResult
+                  key={manga.id}
+                  manga={manga}
+                  onClick={onResultClick}
+                />
+              ))}
         </div>
       </main>
     </div>
